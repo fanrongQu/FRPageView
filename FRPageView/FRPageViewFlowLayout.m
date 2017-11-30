@@ -68,9 +68,10 @@
     for (UICollectionViewLayoutAttributes *attrs in array) {
         // cell的中心点x 和 collectionView最中心点的x值 的间距
         CGFloat delta = ABS(attrs.center.x - centerX);
-
+        delta = MIN(delta, self.itemSize.width);
         // 根据间距值 计算 cell的缩放比例
         CGFloat scale = 1 - delta / self.itemSize.width;
+        NSLog(@"%f",scale);
         scale = scale > self.itemScale?scale:self.itemScale;
         // 设置缩放比例
         attrs.transform = CGAffineTransformMakeScale(scale, scale);
