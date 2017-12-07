@@ -79,7 +79,9 @@ UICollectionViewDelegateFlowLayout>
             self.pageControl.frame = CGRectMake(0, bounds.size.height - 15, bounds.size.width, 15);
         }
         
-        [self scrollViewScrollToCenter];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self scrollViewScrollToCenter];
+        });
     }
 }
 
