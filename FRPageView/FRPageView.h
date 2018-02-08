@@ -56,9 +56,18 @@
 
 @interface FRPageView : UIView
 
+/**
+ 自动滚动
+ */
 @property (nonatomic, assign) BOOL autoScroll;
-
+/**
+ view缩放比例
+ */
 @property (nonatomic, assign) CGFloat pageViewScale;
+/**
+ view间距
+ */
+@property (nonatomic, assign) CGFloat itemSpacing;
 
 @property (nonatomic, strong) FRPageControl *pageControl;
 

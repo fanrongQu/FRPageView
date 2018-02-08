@@ -14,4 +14,6 @@
 
 @property (nonatomic, assign) CGFloat itemScale;
 
+@property (nonatomic, assign) CGFloat itemSpacing;
+
 @end

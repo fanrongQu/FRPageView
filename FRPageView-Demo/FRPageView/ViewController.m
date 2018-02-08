@@ -100,7 +100,8 @@ FRPageViewDelegate>
         _pageView.dataSource = self;
         _pageView.delegate = self;
         _pageView.backgroundColor = [UIColor clearColor];
-        _pageView.pageViewScale = 0.86;
+        _pageView.pageViewScale = 0.80;
+        _pageView.itemSpacing = 100;
         _pageView.autoScroll = YES;
         _pageView.pageControl.currentPageIndicatorTintColor = [UIColor orangeColor];
         _pageView.pageControl.controlSpacing = 3.0;
@@ -118,7 +119,6 @@ FRPageViewDelegate>
         _page2View = [[FRPageView alloc] initWithFrame:CGRectMake(0, 300, self.view.bounds.size.width, 180)];
         _page2View.dataSource = self;
         _page2View.delegate = self;
-        
         [_page2View registerClass:[FRPageViewCell class] forCellWithReuseIdentifier:@"FRpage2ViewCell"];
         [self.view addSubview:_page2View];
     }

@@ -10,9 +10,9 @@
 
 @implementation FRPageViewFlowLayout
 
-- (instancetype)init
-{
+- (instancetype)init {
     if (self = [super init]) {
+        self.itemScale = 1.0;
     }
     return self;
 }
@@ -29,7 +29,10 @@
 }
 
 - (CGFloat)cellWidth {
-    return self.collectionView.bounds.size.width * self.itemScale - 60 * (1 - self.itemScale);
+    if (self.itemScale == 1.0) {
+        return self.collectionView.bounds.size.width;
+    }
+    return self.collectionView.bounds.size.width * self.itemScale - self.itemSpacing * (1 - self.itemScale);
 }
 
 /**
@@ -38,13 +41,19 @@
 - (void)prepareLayout
 {
     [super prepareLayout];
-    CGSize size = self.collectionView.frame.size;
-    self.itemSize = CGSizeMake(size.width * self.itemScale, size.height * self.itemScale);
-    CGFloat margin = - 60 * (1 - self.itemScale);
-    self.minimumLineSpacing = margin;
-    self.sectionInset = UIEdgeInsetsMake(0, margin/2, 0, margin/2);
     // 水平滚动
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    CGSize size = self.collectionView.frame.size;
+    if (self.itemScale == 1.0) {
+        self.itemSize = size;
+        self.minimumLineSpacing = self.itemSpacing;
+        self.sectionInset = UIEdgeInsetsMake(0, 0, 0, self.itemSpacing);
+        return;
+    }
+    self.itemSize = CGSizeMake(size.width * self.itemScale, size.height * self.itemScale);
+    CGFloat margin = - self.itemSpacing * (1 - self.itemScale);
+    self.minimumLineSpacing = margin;
+    self.sectionInset = UIEdgeInsetsMake(0, margin/2, 0, margin/2);
 }
 
 /**
@@ -107,12 +116,11 @@
 //    return proposedContentOffset;
 //}
 
-- (CGFloat)itemScale {
-    if (!_itemScale) {
-        _itemScale = 1.0;
+- (void)setItemScale:(CGFloat)itemScale {
+    _itemScale = itemScale;
+    if (!_itemSpacing && itemScale != 1) {//为cell等比例缩放时设置默认间距
+        _itemSpacing = 50;
     }
-    return _itemScale;
 }
-
 
 @end

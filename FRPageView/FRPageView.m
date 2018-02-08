@@ -63,6 +63,10 @@ UICollectionViewDelegateFlowLayout>
     if (!_pageCount) return;
     CGFloat flowLayout = [self.flowLayout cellWidth];
     CGFloat selfContentOffsetX = flowLayout * ((int)MaxSections / 2 * self.pageCount + row) - (self.bounds.size.width - flowLayout) * 0.5;
+    if (self.pageViewScale == 1) {
+        flowLayout += _itemSpacing;
+        selfContentOffsetX = flowLayout * ((int)MaxSections / 2 * self.pageCount + row);
+    }
     //隐式滚动，切换至中间section实现定时无限滚动效果
     [self.pageCollectionView setContentOffset:CGPointMake(selfContentOffsetX, 0) animated:NO];
 }
@@ -141,7 +145,11 @@ UICollectionViewDelegateFlowLayout>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.pageCollectionView) {//设置页码
         if (self.pageCount) {
-            int page = (int) (scrollView.contentOffset.x/[self.flowLayout cellWidth]+0.5)%self.pageCount;
+            CGFloat scrollW = [self.flowLayout cellWidth];
+            if (self.pageViewScale == 1) {
+                scrollW += _itemSpacing;
+            }
+            int page = (int) (scrollView.contentOffset.x/scrollW+0.5)%self.pageCount;
             self.pageControl.currentPage = page;
             if (self.flowLayout && _delegate && [_delegate respondsToSelector:@selector(FRPageView:didScrollScale:)]) {
                 
@@ -186,11 +194,15 @@ UICollectionViewDelegateFlowLayout>
  实现scrollView滚动分页
  */
 - (void)pageScroll:(UIScrollView *)scrollView haveDecelerating:(BOOL)haveDecelerating {
-    if (self.pageViewScale == 1) return;
+    if (self.pageViewScale == 1&&self.itemSpacing == 0) return;
     CGFloat moveW = scrollView.contentOffset.x;
     CGFloat scrollViewW = scrollView.frame.size.width;
     CGFloat width = [self.flowLayout cellWidth];
     CGFloat halfWidth = width * 0.5;
+    if (self.pageViewScale == 1) {
+        scrollViewW = scrollViewW + _itemSpacing;
+        width += _itemSpacing;
+    }
     CGFloat maxMoveW = scrollView.contentSize.width - scrollViewW;
     CGFloat halfMargin = (scrollViewW - width) * 0.5;
     
@@ -225,11 +237,12 @@ UICollectionViewDelegateFlowLayout>
     if (!_pageCollectionView) {
         
         FRPageViewFlowLayout *layout = [[FRPageViewFlowLayout alloc] init];
-        layout.itemScale = self.pageViewScale > 1?1:self.pageViewScale;;
+        if(_pageViewScale) layout.itemScale = self.pageViewScale > 1?1:self.pageViewScale;
+        if(_itemSpacing) layout.itemSpacing = self.itemSpacing < 0?0:self.itemSpacing;
         self.flowLayout = layout;
         
         _pageCollectionView = [[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:layout];
-        if(self.pageViewScale == 1)_pageCollectionView.pagingEnabled = YES;
+        if(self.pageViewScale == 1&&_itemSpacing == 0)_pageCollectionView.pagingEnabled = YES;
         _pageCollectionView.showsHorizontalScrollIndicator = NO;
         _pageCollectionView.bounces = NO;
         _pageCollectionView.backgroundColor = [UIColor clearColor];
