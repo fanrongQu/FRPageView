@@ -180,6 +180,8 @@ UICollectionViewDelegateFlowLayout>
     if (scrollView == self.pageCollectionView) {
         //手势没有惯性效果时执行
         if(!decelerate) [self pageScroll:scrollView haveDecelerating:NO];
+        //解决pageViewScale == 1时滑动后不会自动滚动
+        if (self.pageViewScale == 1 && _timer == nil && _autoScroll) [self addTimer];
     }
 }
 

@@ -42,6 +42,8 @@
 
 -(void)initialize{
     self.backgroundColor=[UIColor clearColor];
+    _contentMode = 1;
+    _marginSpacing = 12;
     _numberOfPages=0;
     _currentPage=0;
     _controlSize = CGSizeMake(5, 5);
@@ -102,8 +104,19 @@
     [self createPointView];
 }
 
+- (void)setContentMode:(FRPageControlContentMode)contentMode {
+    if (_contentMode == contentMode) return;
+    _contentMode = contentMode;
+    [self createPointView];
+}
+
+- (void)setMarginSpacing:(CGFloat)marginSpacing {
+    if (_marginSpacing == marginSpacing) return;
+    _marginSpacing = marginSpacing;
+    [self createPointView];
+}
+
 -(void)setCurrentPage:(NSInteger)currentPage{
-    
     
 //    if([self.delegate respondsToSelector:@selector(ellipsePageControlClick:index:)])
 //    {
@@ -137,12 +150,18 @@
     if(self.frame.size.width<mainWidth){
         startX=0;
     }else{
-        startX=(self.frame.size.width-mainWidth)/2;
+        if (_contentMode == FRPageControlContentModeLeft && self.frame.size.width - _marginSpacing * 2 > mainWidth) {
+            startX = _marginSpacing;
+        }else if (_contentMode == FRPageControlContentModeRight && self.frame.size.width - _marginSpacing * 2 > mainWidth) {
+            startX = (self.frame.size.width-mainWidth) - _marginSpacing;
+        }else {
+            startX = (self.frame.size.width-mainWidth)/2;
+        }
     }
     if(self.frame.size.height<controlSizeH){
-        startY=0;
+        startY = 0;
     }else{
-        startY=(self.frame.size.height-controlSizeH)/2;
+        startY = (self.frame.size.height-controlSizeH)/2;
     }
     //动态创建点
     for (int page=0; page<_numberOfPages; page++) {

@@ -1,6 +1,6 @@
  Pod::Spec.new do |s|
  s.name = 'FRPageView'
- s.version = '1.0.1'
+ s.version = '1.0.2'
  s.license = {:type => 'MIT', :file => "LICENSE"}
  s.summary = '自定义的一个轮播视图，接入简单（仿一号店效果）'
  s.authors = {'FR' => '1366225686@qq.com'}

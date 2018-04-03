@@ -119,6 +119,9 @@ FRPageViewDelegate>
         _page2View = [[FRPageView alloc] initWithFrame:CGRectMake(0, 300, self.view.bounds.size.width, 180)];
         _page2View.dataSource = self;
         _page2View.delegate = self;
+        _page2View.autoScroll = YES;
+        _page2View.pageControl.marginSpacing = 16;
+        _page2View.pageControl.contentMode = FRPageControlContentModeLeft;
         [_page2View registerClass:[FRPageViewCell class] forCellWithReuseIdentifier:@"FRpage2ViewCell"];
         [self.view addSubview:_page2View];
     }

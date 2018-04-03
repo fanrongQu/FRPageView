@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum : NSUInteger {
+    FRPageControlContentModeLeft,
+    FRPageControlContentModeCenter,
+    FRPageControlContentModeRight,
+} FRPageControlContentMode;
+
 @interface FRPageControl : UIControl
 
+
+@property(nonatomic) FRPageControlContentMode contentMode;// default is FRPageControlContentModeCenter
+@property (nonatomic) CGFloat marginSpacing;           // The spacing to use  page indicators to page side in the page control   default is 10
 @property(nonatomic) NSInteger numberOfPages;          // default is 0
 @property(nonatomic) NSInteger currentPage;            // default is 0. value pinned to 0..numberOfPages-1
 @property (nonatomic) CGFloat controlSpacing;          // The spacing to use between page indicators in the page control.
